@@ -1,47 +1,66 @@
-import cv2
 import numpy as np
+import cv2
 
-def calculate_homogeneity(image):
-    # convertir l'image en niveaux de gris
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # calculer la déviation standard et la moyenne des pixels de l'image
-    std_dev = np.std(gray_image) #calculer l'ecart-type
-    mean = np.mean(gray_image) #calculer la moyenne
+# def image_to_matrix(image_path):
+#     # Read the image using OpenCV
+#     image = cv2.imread(image_path)
+#
+#     # Convert the image to grayscale
+#     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#
+#     # Convert the grayscale image to a matrix
+#     matrix = np.array(gray_image)
+#
+#     return matrix
+#
+#
+# # Provide the path to your image file
+# image_path = 'nissan.jpg'
+#
+# # Convert the image to a matrix
+# matrix = image_to_matrix(image_path)
+#
+# # Print the matrix
+# print(matrix)
+# print("-------------------------------------")
 
-    # calculer l'homogénéité
-    homogeneity = std_dev / mean
+# Given matrix
+matrix = np.array([[121, 71, 145, 175, 178, 180],
+                   [135, 230, 255, 255, 179, 181],
+                   [18, 244, 250, 255, 181, 183],
+                   [121, 244, 250, 0, 178, 180],
+                   [135, 81, 87, 176, 179, 181],
+                   [18, 11, 181, 179, 181, 183],
+                   [164, 161, 157, 221, 229, 234],
+                   [160, 157, 155, 215, 222, 228],
+                   [157, 155, 154, 212, 216, 221]])
 
-    return homogeneity
+# Define positions of submatrices
+positions = [(1, 1), (0, 1), (0, 0), (1, 0)]
+correlation_results = []
 
-def find_best_image(image_paths):
-    best_homogeneity = 0.0
-    best_image = None
 
-    for path in image_paths:
-        # charger l'image
-        image = cv2.imread(path)
 
-        # calculer l'homogénéité de l'image
-        homogeneity = calculate_homogeneity(image)
+# Extract submatrix at the first position
+submatrix_1 = matrix[positions[0][0]:positions[0][0]+3, positions[0][1]:positions[0][1]+3]
+linear_submatrix_1 = submatrix_1.flatten()
+sorted_submatrix_1 = np.sort(linear_submatrix_1)[::1]
 
-        # mettre à jour la meilleure homogénéité et l'image correspondante
-        if homogeneity > best_homogeneity:
-            best_homogeneity = homogeneity
-            best_image = image
+print(f"Submatrix at position {positions[0]}:")
+print(sorted_submatrix_1)
+print()
 
-    return best_image, best_homogeneity
+# Calculate correlations between the first position and other positions
+for i in range(1, len(positions)):
+    row, column = positions[i]
+    submatrix_i = matrix[row:row+3, column:column+3]
+    linear_submatrix_i = submatrix_i.flatten()
+    sorted_submatrix_i = np.sort(linear_submatrix_i)[::1]
 
-# liste des chemins d'accès aux images à comparer
-image_paths = ['messi.jpg','ibiza.jpg','compus.jpg','cooper.jpg','aveo.jpg']
+    # Calculate correlation
+    correlation = np.corrcoef(linear_submatrix_1, sorted_submatrix_i)[0, 1]
 
-# trouver l'image avec la meilleure homogénéité
-best_image, best_homogeneity = find_best_image(image_paths)
-
-# afficher l'image avec la meilleure homogénéité
-cv2.imshow("Best Image", best_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-# afficher la meilleure homogénéité
-print("Best Homogeneity:", best_homogeneity)
+    print(f"Correlation between {positions[0]} and {positions[i]}:")
+    print(correlation)
+    print()
