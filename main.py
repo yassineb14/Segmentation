@@ -2,39 +2,39 @@ import numpy as np
 import cv2
 
 
-# def image_to_matrix(image_path):
-#     # Read the image using OpenCV
-#     image = cv2.imread(image_path)
-#
-#     # Convert the image to grayscale
-#     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-#
-#     # Convert the grayscale image to a matrix
-#     matrix = np.array(gray_image)
-#
-#     return matrix
-#
-#
-# # Provide the path to your image file
-# image_path = 'nissan.jpg'
-#
-# # Convert the image to a matrix
-# matrix = image_to_matrix(image_path)
-#
-# # Print the matrix
-# print(matrix)
-# print("-------------------------------------")
+def image_to_matrix(image_path):
+    # Read the image using OpenCV
+    image = cv2.imread(image_path)
 
-# Given matrix
-matrix = np.array([[121, 71, 145, 175, 178, 180],
-                   [135, 230, 255, 255, 179, 181],
-                   [18, 244, 250, 255, 181, 183],
-                   [121, 244, 250, 0, 178, 180],
-                   [135, 81, 87, 176, 179, 181],
-                   [18, 11, 181, 179, 181, 183],
-                   [164, 161, 157, 221, 229, 234],
-                   [160, 157, 155, 215, 222, 228],
-                   [157, 155, 154, 212, 216, 221]])
+    # Convert the image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Convert the grayscale image to a matrix
+    matrix = np.array(gray_image)
+
+    return matrix
+
+
+# Provide the path to your image file
+image_path = 'images/nissan.jpg'
+
+# Convert the image to a matrix
+matrix = image_to_matrix(image_path)
+
+# Print the matrix
+print(matrix)
+print("-------------------------------------")
+
+# # Given matrix
+# matrix = np.array([[121, 71, 145, 175, 178, 180],
+#                    [135, 230, 255, 255, 179, 181],
+#                    [18, 244, 250, 255, 181, 183],
+#                    [121, 244, 250, 0, 178, 180],
+#                    [135, 81, 87, 176, 179, 181],
+#                    [18, 11, 181, 179, 181, 183],
+#                    [164, 161, 157, 221, 229, 234],
+#                    [160, 157, 155, 215, 222, 228],
+#                    [157, 155, 154, 212, 216, 221]])
 
 # Define positions of submatrices
 positions = [(1, 1), (0, 1), (0, 0), (1, 0)]
@@ -61,6 +61,6 @@ for i in range(1, len(positions)):
     # Calculate correlation
     correlation = np.corrcoef(linear_submatrix_1, sorted_submatrix_i)[0, 1]
 
-    print(f"Correlation between {positions[0]} and {positions[i]}:")
+    print(f"Correlation between {positions[0]} => {sorted_submatrix_1} and {positions[i]} => {sorted_submatrix_i}:")
     print(correlation)
     print()
